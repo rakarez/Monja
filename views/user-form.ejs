@@ -1,0 +1,339 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <title>Admin Dashboard</title>
+</head>
+<style type="text/css">
+  .navbar.bg-light {
+    background-color: #000 !important;
+    transition: ease 0.5s;
+  }
+
+  .user-profile {
+    width: 50px;
+    height: 50px;
+    background-color: #f1f1f1;
+  }
+
+  .navbar .menu-bar {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .navbar .menu-bar .bars {
+    position: relative;
+    top: 50%;
+    width: 30px;
+    height: 2px;
+    background-color: #fff;
+  }
+
+  .navbar .menu-bar .bars::after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+  }
+
+  .navbar .menu-bar .bars::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    width: 100%;
+    height: 2px;
+    background-color: #fff;
+  }
+
+  .navbar ul.navbar-nav li.nav-item.ets-right-0 .dropdown-menu {
+    left: auto;
+    right: 0;
+    position: absolute;
+  }
+
+  .side-bar {
+    position: fixed;
+    top: 81px;
+    left: 0;
+    padding: 15px;
+    display: inline-block;
+    width: 100px;
+    background-color: #fff;
+    box-shadow: 0px 0px 8px #ccc;
+    height: 100vh;
+    transition: ease 0.5s;
+    overflow-y: auto;
+  }
+
+  .main-body-content {
+    display: inline-block;
+    padding: 15px;
+    background-color: #eef4fb;
+    height: 100vh;
+    padding-left: 100px;
+    transition: ease 0.5s;
+  }
+
+  .ets-pt {
+    padding-top: 100px;
+  }
+
+  .main-admin.show-menu .side-bar {
+    width: 250px;
+  }
+
+  .main-admin.show-menu .main-body-content {
+    padding-left: 265px;
+  }
+
+  .main-admin.show-menu .navbar .menu-bar .bars {
+    width: 15px;
+  }
+
+  .main-admin.show-menu .navbar .menu-bar .bars::after {
+    width: 10px;
+  }
+
+  .main-admin.show-menu .navbar .menu-bar .bars::before {
+    width: 25px;
+  }
+
+  .main-admin.show-menu .side-bar-links {
+    opacity: 1;
+  }
+
+  .main-admin.show-menu .side-bar .side-bar-icons {
+    opacity: 0;
+  }
+
+  /**** end effacts ****/
+  .side-bar .side-bar-links {
+    opacity: 0;
+    transition: ease 0.5s;
+  }
+
+  .side-bar .side-bar-links ul.navbar-nav li a {
+    font-size: 14px;
+    color: #000;
+    font-weight: 500;
+    padding: 10px;
+  }
+
+  .side-bar .side-bar-links ul.navbar-nav li a i {
+    font-size: 20px;
+    color: #8ac1f6;
+  }
+
+  .side-bar .side-bar-links ul.navbar-nav li a:hover,
+  .side-bar-links ul.navbar-nav li a:focus {
+    text-decoration: none;
+    background-color: #8ac1f6;
+    color: #fff;
+  }
+
+  .side-bar .side-bar-links ul.navbar-nav li a:hover i {
+    color: #fff;
+  }
+
+  .side-bar .side-bar-logo img {
+    width: 100px;
+    height: 100px;
+  }
+
+  .side-bar .side-bar-icons {
+    position: absolute;
+    top: 20px;
+    right: 0;
+    width: 100px;
+    opacity: 1;
+    transition: ease 0.5s;
+  }
+
+  .side-bar .side-bar-icons .side-bar-logo img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+  }
+
+  .side-bar .side-bar-icons .side-bar-logo h5 {
+    font-size: 14px;
+  }
+
+  .side-bar .side-bar-icons .set-width {
+    color: #000;
+    font-size: 32px;
+  }
+
+  .side-bar .side-bar-icons .set-width:hover,
+  .side-bar .side-bar-icons .set-width:focus {
+    color: #8ac1f6;
+    text-decoration: none;
+  }
+
+  .form-justify {
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+</style>
+
+<body>
+  <div id="page-container" class="main-admin">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light position-fixed w-100">
+      <a class="navbar-brand" href="#"></a>
+      <div id="open-menu" class="menu-bar">
+        <div class="bars"></div>
+      </div>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown ets-right-0">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-user-circle" aria-hidden="true" style="color:white"></i>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/adminDashboard/logout">Logout</a>
+          </div>
+        </li>
+      </ul>
+    </nav>
+    <div class="side-bar">
+      <div class="side-bar-links">
+        <div class="side-bar-logo text-center py-3">
+          <img src="" class="img-fluid rounded-circle border bg-secoundry mb-3">
+          <h5>Company Name</h5>
+        </div>
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a href="#" class="nav-links d-block"><i class="fa fa-home pr-2"></i> HOME</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-links d-block"><i class="fa fa-home pr-2"></i> HOME</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-links d-block"><i class="fa fa-home pr-2"></i> HOME</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-links d-block"><i class="fa fa-home pr-2"></i> HOME</a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-links d-block"><i class="fa fa-home pr-2"></i> HOME</a>
+          </li>
+        </ul>
+      </div>
+      <div class="side-bar-icons">
+        <!-- <div class="side-bar-logo text-center py-3">
+	  				<img src="" class="img-fluid rounded-circle border bg-secoundry mb-3">
+	  				<h5>Company Name</h5>
+	  			</div> -->
+        <div class="icons d-flex flex-column align-items-center">
+          <a href="/adminDashboard" class="set-width text-center display-inline-block my-1"><i class="fa fa-home"></i></a>
+          <a href="/adminDashboard/user-form" class="set-width text-center display-inline-block my-1"><i class="fa fa-users"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="main-body-content w-100 ets-pt">
+      <form class="form-justify" accept-charset="UTF-8" action="/adminDashboard/user-form" method="POST" role="form">
+        <div class="form-group">
+          <label for="usernameForm">Nama</label>
+          <input type="name" class="form-control" id="name-form" name="name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="usernameForm">Alamat Email</label>
+          <input type="email" class="form-control" id="username-form" name="username" required>
+        </div>
+
+        <div class="form-group">
+          <label for="passwordForm">Password</label>
+          <input type="password" class="form-control" id="password-form" name ="password" required>
+        </div>
+
+        <div class="form-group">
+          <label for="exampleFormControlSelect1">Jabatan</label>
+          <select class="form-control" id="role-form" required name="userType">
+            <option>User</option>
+            <option>PPK</option>
+            <option>PPSPM</option>
+          </select>
+        </div>
+
+        <input class="btn btn-primary" type="submit" value="Daftar">
+        </form>
+
+        <!-- <div class="table-responsive bg-light">
+  			<table class="table">
+  				<tr>
+  					<th>Username</th>
+  					<th>User Type</th>
+  					<th>lorem</th>
+  					<th>ipssum</th>
+  					<th>Dollor</th>
+  				</tr>
+  				<tr>
+  					<td>Vinay</td>
+  					<td>Sharma</td>
+  					<td>lorem ipssum dollor dummy</td>
+  					<td>lorem ipssum dollor dummy</td>
+  					<td>lorem ipssum dollor dummy</td>
+  				</tr>
+  				<tr>
+  					<td>Vinay</td>
+  					<td>Sharma</td>
+  					<td>lorem ipssum dollor dummy</td>
+  					<td>lorem ipssum dollor dummy</td>
+  					<td>lorem ipssum dollor dummy</td>
+  				</tr>
+  				<tr>
+  					<td>Vinay</td>
+  					<td>Sharma</td>
+  					<td>lorem ipssum dollor dummy</td>
+  					<td>lorem ipssum dollor dummy</td>
+  					<td>lorem ipssum dollor dummy</td>
+  				</tr>
+  				<tr>
+  					<td>Vinay</td>
+  					<td>Sharma</td>
+  					<td>lorem ipssum dollor dummy</td>
+  					<td>lorem ipssum dollor dummy</td>
+  					<td>lorem ipssum dollor dummy</td>
+  				</tr>
+  			</table>
+  		</div> -->
+    </div>
+  </div>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <script type="text/javascript">
+    jQuery(document).ready(function() {
+      jQuery("#open-menu").click(function() {
+        if (jQuery('#page-container').hasClass('show-menu')) {
+          jQuery("#page-container").removeClass('show-menu');
+        } else {
+          jQuery("#page-container").addClass('show-menu');
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
