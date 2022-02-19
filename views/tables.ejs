@@ -117,10 +117,17 @@
                             </a>
                             <% break;
                           case "PPSPM": %>
-                          <a href="\approval-ppspm-<%= pengajuan.id %>" class="btn btn-outline-primary btn-circle btn-sm">
-                            <i class="fas fa-file-signature"></i>
-                          </a>
-                          <% break;
+                            <a href="\approval-ppspm-<%= pengajuan.id %>" class="btn btn-outline-primary btn-circle btn-sm">
+                              <i class="fas fa-file-signature"></i>
+                            </a>
+                            <% break;
+                          case "User": %>
+                            <form action="/delete" method="post">
+                              <button name="delete" value="<%= pengajuan._id %>" class="btn btn-danger btn-circle btn-sm">
+                                X
+                              </button>
+                            </form>
+                            <% break;
                         }; %>
                       </td>
                     </tr>

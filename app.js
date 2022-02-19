@@ -312,6 +312,16 @@ app.get("/tables", function(req, res){
   }
 });
 
+app.post("/delete", function(req, res){
+  if (req.isAuthenticated()){
+    Pengajuan.deleteOne({_id: req.body.delete}).then(function(){
+      res.redirect("tables");
+    });
+  } else {
+    res.redirect("/");
+  }
+});
+
 app.get("/logout", function(req, res){
   req.logout();
   res.redirect("/");
@@ -327,16 +337,19 @@ app.get("/documents/:documents", function(req, res){
 app.get("/approval-ppk-:document_id", function (req, res){
   let document_id = req.params.document_id;
   if (req.isAuthenticated()){
-    Pengajuan.findById(document_id, function(err,foundPengajuan){
-      if(err){
-        console.log(err);
-      } else {
-        if(foundPengajuan){
-          // console.log(foundPengajuan);
-          res.render("approval-ppk", {foundPengajuan: foundPengajuan, currentUserType: currentUserType, currentUserName: currentUserName, moment: moment});
+    if (currentUserType === "PPK") {
+      Pengajuan.findById(document_id, function(err,foundPengajuan){
+        if(err){
+          console.log(err);
+        } else {
+          if(foundPengajuan){
+            res.render("approval-ppk", {foundPengajuan: foundPengajuan, currentUserType: currentUserType, currentUserName: currentUserName, moment: moment});
+          }
         }
-      }
-    });
+      });
+    } else {
+      res.send("Not Authorized")
+    }
   } else {
     res.redirect("/");
   }
@@ -359,16 +372,19 @@ app.post("/approval-ppk-:document_id", function(req, res){
 app.get("/approval-ppspm-:document_id", function (req, res){
   let document_id = req.params.document_id;
   if (req.isAuthenticated()){
-    Pengajuan.findById(document_id, function(err,foundPengajuan){
-      if(err){
-        console.log(err);
-      } else {
-        if(foundPengajuan){
-          // console.log(foundPengajuan);
-          res.render("approval-ppspm", {foundPengajuan: foundPengajuan, currentUserType: currentUserType, currentUserName: currentUserName, moment: moment});
+    if (currentUserType === "PPSPM") {
+      Pengajuan.findById(document_id, function(err,foundPengajuan){
+        if(err){
+          console.log(err);
+        } else {
+          if(foundPengajuan){
+            res.render("approval-ppspm", {foundPengajuan: foundPengajuan, currentUserType: currentUserType, currentUserName: currentUserName, moment: moment});
+          }
         }
-      }
-    });
+      });
+    } else {
+      res.send("Not Authorized");
+    }
   } else {
     res.redirect("/");
   }
