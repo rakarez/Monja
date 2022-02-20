@@ -312,6 +312,114 @@ app.get("/tables", function(req, res){
   }
 });
 
+app.get("/pengajuan-selesai", function(req, res){
+  if (req.isAuthenticated()){
+    switch(currentUserType){
+      case "PPK":
+        Pengajuan.find({approvalPPSPM: true}, function(err, foundPengajuan){
+          if(err){
+            console.log(err);
+          } else {
+            if(foundPengajuan) {
+              res.render("tables", {foundPengajuan: foundPengajuan, moment: moment, currentUserType: currentUserType, currentUserName: currentUserName});
+            }
+          }
+        });
+        break;
+      case "PPSPM":
+        Pengajuan.find({approvalPPSPM: true}, function(err, foundPengajuan){
+          if(err){
+            console.log(err);
+          } else {
+            if(foundPengajuan) {
+              res.render("tables", {foundPengajuan: foundPengajuan, moment: moment, currentUserType: currentUserType, currentUserName: currentUserName});
+            }
+          }
+        });
+        break;
+      case "User":
+        Pengajuan.find({name: currentUserName, approvalPPSPM: true}, function(err, foundPengajuan){
+          if(err){
+            console.log(err);
+          } else {
+            if(foundPengajuan) {
+              res.render("tables", {foundPengajuan: foundPengajuan, moment: moment, currentUserType: currentUserType, currentUserName: currentUserName});
+            }
+          }
+        });
+        break;
+      case "admin":
+          Pengajuan.find({approvalPPK: true, approvalPPSPM: true}, function(err, foundPengajuan){
+            if(err){
+              console.log(err);
+            } else {
+              if(foundPengajuan) {
+                res.render("tables", {foundPengajuan: foundPengajuan, moment: moment, currentUserType: currentUserType, currentUserName: currentUserName});
+              }
+            }
+          });
+        break;
+
+    };
+  } else {
+    res.redirect("/");
+  }
+});
+
+app.get("/arsip-pengajuan", function(req, res){
+  if (req.isAuthenticated()){
+    switch(currentUserType){
+      case "PPK":
+        Pengajuan.find({$or: [{approvalPPK: false}, {approvalPPSPM: !null}]}, function(err, foundPengajuan){
+          if(err){
+            console.log(err);
+          } else {
+            if(foundPengajuan) {
+              res.render("tables", {foundPengajuan: foundPengajuan, moment: moment, currentUserType: currentUserType, currentUserName: currentUserName});
+            }
+          }
+        });
+        break;
+      case "PPSPM":
+        Pengajuan.find({$or: [{approvalPPK: false}, {approvalPPSPM: !null}]}, function(err, foundPengajuan){
+          if(err){
+            console.log(err);
+          } else {
+            if(foundPengajuan) {
+              res.render("tables", {foundPengajuan: foundPengajuan, moment: moment, currentUserType: currentUserType, currentUserName: currentUserName});
+            }
+          }
+        });
+        break;
+      case "User":
+        Pengajuan.find({name: currentUserName, $or: [{approvalPPK: false}, {approvalPPSPM: !null}]}, function(err, foundPengajuan){
+          if(err){
+            console.log(err);
+          } else {
+            if(foundPengajuan) {
+              res.render("tables", {foundPengajuan: foundPengajuan, moment: moment, currentUserType: currentUserType, currentUserName: currentUserName});
+            }
+          }
+        });
+        break;
+      case "admin":
+          Pengajuan.find({$or: [{approvalPPK: false}, {approvalPPSPM: !null}]}, function(err, foundPengajuan){
+            if(err){
+              console.log(err);
+            } else {
+              if(foundPengajuan) {
+                res.render("tables", {foundPengajuan: foundPengajuan, moment: moment, currentUserType: currentUserType, currentUserName: currentUserName});
+              }
+            }
+          });
+        break;
+
+    };
+  } else {
+    res.redirect("/");
+  }
+});
+
 app.post("/delete", function(req, res){
   if (req.isAuthenticated()){
     Pengajuan.deleteOne({_id: req.body.delete}).then(function(){
