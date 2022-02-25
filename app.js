@@ -10,6 +10,7 @@ const findOrCreate = require('mongoose-findorcreate');
 const app = express();
 const path = require('path');
 const multer = require('multer');
+const { uploadFile, getFileStream } = require('./s3');
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, 'documents')
@@ -31,7 +32,7 @@ app.use(bodyParser.urlencoded({
 }));
 
 app.use(session({
-  secret: '664262',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
 }));
@@ -39,7 +40,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect(("mongodb+srv://admin:admin@cluster0.uracw.mongodb.net/userDB?retryWrites=true&w=majority"), {useNewUrlParser: true});
+mongoose.connect(("mongodb+srv://admin:"+ process.env.MONGO_SECRET + "@cluster0.uracw.mongodb.net/userDB?retryWrites=true&w=majority"), {useNewUrlParser: true});
 
 const userSchema = new mongoose.Schema ({
   name: String,
@@ -228,14 +229,16 @@ app.get("/pengajuan-baru", function(req, res){
   }
 });
 
-app.post("/pengajuan-baru", upload.single('document'), function(req, res){
+app.post("/pengajuan-baru", upload.single('document'), async function(req, res){
+  const file = req.file;
+  const result = await uploadFile(file);
   const pengajuan = new Pengajuan ({
     namaPengajuan: req.body.namaPengajuan,
     tanggalPengajuan: req.body.tanggalPengajuan,
     mak: req.body.MAK,
     jumlahBiaya: req.body.jumlahBiaya,
     bagian: req.body.bagian,
-    lampiran: req.file.filename,
+    lampiran: result.key,
     name: currentUserName,
     approvalPPK: null,
     approvalPPSPM: null
@@ -436,10 +439,12 @@ app.get("/logout", function(req, res){
   currentUserType = null;
 });
 
-app.get("/documents/:documents", function(req, res){
+app.get("/documents/:key", function(req, res){
   // console.log(req.params.documents);
-  const file = __dirname + "\\documents\\" + req.params.documents;
-  res.download(file);
+  const key = req.params.key;
+  const readStream = getFileStream(key);
+  res.attachment(key);
+  readStream.pipe(res);
 });
 
 app.get("/approval-ppk-:document_id", function (req, res){
@@ -517,4 +522,6 @@ if (port == null || port == "") {
   port = 8000;
 }
 
-app.listen(port);
+app.listen(port, () =>{
+  console.log("Server started successfully");
+});
